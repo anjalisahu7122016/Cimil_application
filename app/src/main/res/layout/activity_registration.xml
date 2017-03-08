@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_registration"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4EBEEE"
+    tools:context="com.example.anjali.cimil_application.RegistrationActivity">
+    <TextView
+        android:id="@+id/SignIn"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@mipmap/ic_bottom_bar_bg_24dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="Already have an account? Login Please!"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/sign_up_by_gmail"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@mipmap/google_sign_up"
+        android:text="sign up with google"
+        android:textAllCaps="true"
+        android:drawableLeft="@mipmap/gmail_logo"
+        android:textColor="@android:color/black"
+        android:paddingLeft="3dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/SignIn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/sign_up_by_facebook"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="onClick"
+        android:layout_marginRight="20dp"
+        android:background="@mipmap/facebook_button"
+        android:text="sign up with facebook"
+        android:textAllCaps="true"
+        android:drawableLeft="@mipmap/facebook_logo"
+        android:textColor="@android:color/black"
+        android:paddingLeft="8dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_by_gmail"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/create_an_account"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@mipmap/button_style"
+        android:text="Create An Account"
+        android:textAllCaps="true"
+        android:drawableLeft="@mipmap/person_icon"
+        android:textColor="@android:color/black"
+        android:paddingLeft="5dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_by_facebook"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/cimil"
+        android:id="@+id/cimil_logo"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textMessage"/>
+
+
+    <TextView
+        android:id="@+id/textMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_horizontal"
+        android:maxLines="3"
+        android:text="Report Traffic Violation \n And \n Earn Reward In Few Steps "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/black"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+</android.support.constraint.ConstraintLayout>

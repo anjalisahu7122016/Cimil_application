@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_splash_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.anjali.cimil_application.SplashScreen"
+    android:background="#4EbEEE">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/cimil"
+        android:layout_marginTop="125dp"
+        android:layout_marginLeft="150dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/cimil_logo"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/header"
+        android:text="CIMIL"
+       android:textSize="40sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/cimil_logo"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sub_header"
+        android:text="(Central Infobase for Motor Insurance Ltd)"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/header"
+        android:layout_centerHorizontal="true"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/sub_header"
+        android:layout_alignRight="@+id/cimil_logo"
+        android:layout_alignEnd="@+id/cimil_logo"
+        android:layout_marginTop="45dp"
+        android:id="@+id/progressBar"
+        android:theme="@style/AppTheme.WhiteAccent"
+       />
+
+</RelativeLayout>
