@@ -1,14 +1,21 @@
 package com.example.anjali.cimil_application;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInstaller;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 
 import android.service.textservice.SpellCheckerService;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -29,6 +36,8 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,13 +45,17 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity {
+    private static String emailAddress;
     private TextView textView, footer;
     private Button create_an_account, sign_up_by_facebook, sign_up_by_google;
     private CallbackManager callbackManager;
-    private String  userName,userGender,userAgeRange,userRelationStatus,userReligion,userHometown,userCurrentAddress,imageurl,id,email;
-
+    private String userName, userGender, userAgeRange, userRelationStatus, userReligion, userHometown, userCurrentAddress, imageurl, id, email;
+    String google_username = "";
 
 
     @Override
@@ -51,11 +64,14 @@ public class RegistrationActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_registration);
+
+        final int REQUEST_GET_ACCOUNT = 112;
+
         textView = (TextView) findViewById(R.id.textMessage);
         footer = (TextView) findViewById(R.id.SignIn);
         create_an_account = (Button) findViewById(R.id.create_an_account);
         create_an_account.setOnClickListener(sign_in_manually);
-        sign_up_by_facebook = (Button)findViewById(R.id.sign_up_by_facebook);
+        sign_up_by_facebook = (Button) findViewById(R.id.sign_up_by_facebook);
         sign_up_by_facebook.setOnClickListener(facebooklogin);
         sign_up_by_google = (Button) findViewById(R.id.sign_up_by_gmail);
         sign_up_by_google.setOnClickListener(signUpByGoogle);
@@ -65,6 +81,8 @@ public class RegistrationActivity extends AppCompatActivity {
         create_an_account.setTypeface(custum_font);
         sign_up_by_facebook.setTypeface(custum_font);
         sign_up_by_google.setTypeface(custum_font);
+
+
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -77,12 +95,13 @@ public class RegistrationActivity extends AppCompatActivity {
                         loadDataFromFaceBook(object);
                     }
                 });
-                Bundle parameters=new Bundle();
+                Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,gender,picture,link,about,age_range,birthday,email,location,hometown,relationship_status,religion");
                 request.setParameters(parameters);
                 request.executeAsync();
 //                displayMessage(profile);
             }
+
             @Override
             public void onCancel() {
 
@@ -97,7 +116,39 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
+    public void getMailAddress() {
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
 
+
+        Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
+        for (Account account : accounts) {
+            if (emailPattern.matcher(account.name).matches()) {
+                emailAddress = account.name;
+                if (!emailAddress.isEmpty()) {
+                    String email = emailAddress;
+                    String[] parts = email.split("@");
+                    if (parts.length > 0 && parts[0] != null){
+                       google_username = parts[0];
+                        Toast.makeText(getApplicationContext(),"gmail user name is"+google_username,Toast.LENGTH_SHORT).show();
+                }
+            }
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("emailAddress",emailAddress );
+                bundle.putString("gmail_username",google_username);
+                Toast.makeText(getApplicationContext(),"bundle data"+bundle,Toast.LENGTH_SHORT).show();
+                EmailFragment  emailFragment = new EmailFragment();
+                emailFragment.setArguments(bundle);
+                ft.add(android.R.id.content,emailFragment);
+                ft.commit();
+
+            }
+        }
+
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -106,32 +157,40 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void displayMessage(Profile profile) {
-        if (profile !=null){
-            Toast.makeText(this, ""+profile.getName(), Toast.LENGTH_SHORT).show();
+        if (profile != null) {
+            Toast.makeText(this, "" + profile.getName(), Toast.LENGTH_SHORT).show();
         }
     }
+
     View.OnClickListener facebooklogin = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            LoginManager.getInstance().logInWithReadPermissions(RegistrationActivity.this, Arrays.asList( "public_profile","user_friends","email","user_location","user_birthday","user_about_me","user_hometown","user_relationships","user_religion_politics"));
+            LoginManager.getInstance().logInWithReadPermissions(RegistrationActivity.this, Arrays.asList("public_profile", "user_friends", "email", "user_location", "user_birthday", "user_about_me", "user_hometown", "user_relationships", "user_religion_politics"));
 
 
         }
     };
+
     @Override
     protected void onActivityResult(int requestCode, int responseCode,
                                     Intent data) {
-        callbackManager.onActivityResult(requestCode,responseCode,data);
 
-
-//        if (responseCode == RESULT_OK)
-//        {
-//            System.out.println("inside success");
-//            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+        callbackManager.onActivityResult(requestCode, responseCode, data);
+////        if (requestCode == REQUEST_CODE && responseCode == RESULT_OK) {
+////             emailAddress = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+////
 //
-//        }LoginManager.getInstance().logOut();
-
-}
+//        }
+//    else {
+//
+//            //        if (responseCode == RESULT_OK)
+////        {
+////            System.out.println("inside success");
+////            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+////
+////        }LoginManager.getInstance().logOut();
+//        }
+    }
 
     View.OnClickListener sign_in_manually = new View.OnClickListener() {
         @Override
@@ -143,12 +202,13 @@ public class RegistrationActivity extends AppCompatActivity {
     View.OnClickListener signUpByGoogle = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            EmailFragment  emailFragment = new EmailFragment();
-            ft.add(android.R.id.content,emailFragment);
-            ft.commit();
+//            For Account Picker
+//            Intent googlePicker = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, true, null, null, null, null);
+//            startActivityForResult(googlePicker,REQUEST_CODE);
+            getMailAddress();
         }
     };
+
     private void loadDataFromFaceBook(JSONObject object) {
         try
         {
@@ -181,4 +241,6 @@ public class RegistrationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 }
