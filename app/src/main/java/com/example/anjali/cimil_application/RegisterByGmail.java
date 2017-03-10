@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,6 +37,16 @@ public class RegisterByGmail extends AppCompatActivity {
         if(intent.hasExtra("gmail_name"))
             myValue = intent.getStringExtra("gmail_name");
         user_name.setText(myValue);
-
+Sign_Up.setOnClickListener(sign_up_listener);
     }
+    View.OnClickListener sign_up_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            finish();
+        }
+    };
 }
+
+
+
+
